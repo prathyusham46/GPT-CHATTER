@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    background: linear-gradient(to right, #141e30, #243b55);
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2.5em;
+}
+
+.chat-container {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#chat-log {
+    height: 200px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: left;
+}
+
+#user-input {
+    width: 70%;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: "balck";
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Weather and Time GPT </title>
+
+<script>
+const apiKey = 'a557346d87cba6ec43dce614637cf774';
+const apiUrl = 'http://api.openweathermap.org/data/2.5/weather';
+
+function submitCommand() {
+    var userInput = document.getElementById('user-input').value;
+
+    if (userInput.toLowerCase() === 'exit') {
+        alert('Goodbye!');
+        return;
+    }
+
+    var chatLog = document.getElementById('chat-log');
+    processCommand(userInput).then(response => {
+        var chatMessage = document.createElement('div');
+        chatMessage.textContent = 'AI GPT: ' + response;
+        chatLog.appendChild(chatMessage);
+
+        speakResponse(response);
+    });
+
+    document.getElementById('user-input').value = '';
+}
+
+async function processCommand(userInput) {
+    if (userInput.includes('time')) {
+        return getTime();
+    } else if (userInput.includes('weather')) {
+        var city = prompt('Which city\'s weather do you want to know?');
+        return await getWeather(city);
+    } else {
+        return "I'm not sure how to respond to that.";
+    }
+}
+
+function getTime() {
+    var currentTime = new Date();
+    var hours = currentTime.getHours();
+    var minutes = currentTime.getMinutes();
+    var seconds = currentTime.getSeconds();
+    return 'The current time is ' + hours + ':' + minutes + ':' + seconds + '.';
+}
+
+async function getWeather(city) {
+    var weatherUrl = `${apiUrl}?q=${city}&appid=${apiKey}&units=metric`;
+
+    try {
+        var response = await fetch(weatherUrl);
+        var data = await response.json();
+        var temperature = data.main.temp;
+        return `The current temperature in ${city} is ${temperature}°C.`;
+    } catch (error) {
+        console.error('Error fetching weather data:', error);
+        return 'Sorry, an error occurred while fetching weather data.';
+    }
+}
+
+function speakResponse(response) {
+    var utterance = new SpeechSynthesisUtterance(response);
+    window.speechSynthesis.speak(utterance);
+}
+
+</script>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather and Time GPT</h1>
+        <div class="chat-container">
+            <div id="chat-log"></div>
+            <input type="text" id="user-input" placeholder="Type your command...">
+            <button onclick="submitCommand()">Submit</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

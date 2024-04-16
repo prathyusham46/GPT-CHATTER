@@ -1,0 +1,39 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.chat-container {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 300px;
+}
+
+#chat-box {
+    height: 200px;
+    padding: 10px;
+    overflow-y: scroll;
+}
+
+.user-input {
+    display: flex;
+    padding: 10px;
+    background-color: #fff;
+}
+
+input {
+    flex: 1;
+    padding: 5px;
+    margin-right: 5px;
+}
+
+button {
+    cursor: pointer;
+    padding: 5px 10px;
+}

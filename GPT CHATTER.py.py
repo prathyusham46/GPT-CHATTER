@@ -6,7 +6,7 @@ def get_time():
     current_time = time.strftime("%H:%M:%S", time.localtime())
     return f"The current time is {current_time}."
 
-def get_weather(city):
+def get_weather(city): 
     owm = OWM('a557346d87cba6ec43dce614637cf774')  
     mgr = owm.weather_manager()
     observation = mgr.weather_at_place(city)
